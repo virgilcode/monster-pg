@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:rdb="http://www.dangdang.com/schema/ddframe/rdb"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.dangdang.com/schema/ddframe/rdb
+       http://www.dangdang.com/schema/ddframe/rdb/rdb.xsd">
+
+    <!-- 配置数据源 -->
+    <!--<bean name="parentDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"-->
+          <!--destroy-method="close">-->
+        <!--<property name="url" value="${jdbc.url.0}"/>-->
+        <!--<property name="username" value="${jdbc.username.0}"/>-->
+        <!--<property name="password" value="${jdbc.password.0}"/>-->
+
+        <!--&lt;!&ndash; 初始化连接大小 &ndash;&gt;-->
+        <!--<property name="initialSize" value="0"/>-->
+        <!--&lt;!&ndash; 连接池最大使用连接数量 &ndash;&gt;-->
+        <!--<property name="maxActive" value="20"/>-->
+        <!--&lt;!&ndash; 连接池最大空闲 &ndash;&gt;-->
+        <!--<property name="maxIdle" value="20"/>-->
+        <!--&lt;!&ndash; 连接池最小空闲 &ndash;&gt;-->
+        <!--<property name="minIdle" value="0"/>-->
+        <!--&lt;!&ndash; 获取连接最大等待时间 &ndash;&gt;-->
+        <!--<property name="maxWait" value="60000"/>-->
+
+        <!--<property name="validationQuery" value="${validationQuery}"/>-->
+        <!--<property name="testOnBorrow" value="false"/>-->
+        <!--<property name="testOnReturn" value="false"/>-->
+        <!--<property name="testWhileIdle" value="true"/>-->
+
+        <!--&lt;!&ndash; 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 &ndash;&gt;-->
+        <!--<property name="timeBetweenEvictionRunsMillis" value="60000"/>-->
+        <!--&lt;!&ndash; 配置一个连接在池中最小生存的时间，单位是毫秒 &ndash;&gt;-->
+        <!--<property name="minEvictableIdleTimeMillis" value="25200000"/>-->
+
+        <!--&lt;!&ndash; 打开removeAbandoned功能 &ndash;&gt;-->
+        <!--<property name="removeAbandoned" value="true"/>-->
+        <!--&lt;!&ndash; 1800秒，也就是30分钟 &ndash;&gt;-->
+        <!--<property name="removeAbandonedTimeout" value="1800"/>-->
+        <!--&lt;!&ndash; 关闭abanded连接时输出错误日志 &ndash;&gt;-->
+        <!--<property name="logAbandoned" value="true"/>-->
+
+        <!--&lt;!&ndash; 监控数据库 &ndash;&gt;-->
+        <!--<property name="filters" value="mergeStat"/>-->
+    <!--</bean>-->
+
+
+    <!--&lt;!&ndash;数据源0 &ndash;&gt;-->
+    <!--<bean id="ds_0" parent="parentDataSource">-->
+        <!--<property name="url" value="${jdbc.url.0}"/>-->
+        <!--<property name="username" value="${jdbc.username.0}"/>-->
+        <!--<property name="password" value="${jdbc.password.0}"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;数据源1 &ndash;&gt;-->
+    <!--<bean id="ds_1" parent="parentDataSource">-->
+        <!--<property name="url" value="${jdbc.url.1}"/>-->
+        <!--<property name="username" value="${jdbc.username.1}"/>-->
+        <!--<property name="password" value="${jdbc.password.1}"/>-->
+    <!--</bean>-->
+
+
+    <!--&lt;!&ndash; 采用传统配置-->
+    <!--<bean id="dataSourceRule" class="com.dangdang.ddframe.rdb.sharding.api.rule.DataSourceRule">-->
+        <!--<constructor-arg index="0">-->
+            <!--<map>-->
+                <!--<entry key="ds_0" value-ref="ds_0"/>-->
+                <!--<entry key="ds_1" value-ref="ds_1"/>-->
+            <!--</map>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg index="1" value="ds_0"></constructor-arg>-->
+    <!--</bean>-->
+
+    <!--<bean id="orderTableRule" class="com.dangdang.ddframe.rdb.sharding.api.rule.TableRule">-->
+        <!--<constructor-arg value="t_order" index="0"/>-->
+        <!--<constructor-arg value="false" index="1"/>-->
+        <!--<constructor-arg index="2">-->
+            <!--<list>-->
+                <!--<value>t_order_0</value>-->
+                <!--<value>t_order_1</value>-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg index="3" ref="dataSourceRule"/>-->
+        <!--<constructor-arg index="4">-->
+            <!--<list>-->
+                <!--<value>ds_0</value>-->
+                <!--<value>ds_1</value>-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg index="5" ref="databaseShardingStrategy"/>-->
+        <!--<constructor-arg index="6" ref="tableShardingStrategy"/>-->
+    <!--</bean>-->
+
+     <!--<bean id="databaseShardingStrategy" class="com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy">-->
+        <!--<constructor-arg index="0" value="user_id"/>-->
+        <!--<constructor-arg index="1">-->
+            <!--<bean class="com.molbase.algorithm.SingleKeyModuloDatabaseShardingAlgorithm">-->
+                <!--<property name="dbCount" value="2"/>-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+    <!--<bean id="tableShardingStrategy" class="com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy">-->
+        <!--<constructor-arg index="0" value="order_id"/>-->
+        <!--<constructor-arg index="1">-->
+            <!--<bean class="com.molbase.algorithm.SingleKeyModuloTableShardingAlgorithm">-->
+                <!--<property name="tableCount" value="2"/>-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+    <!--<bean id="bindingTableRules" class="com.dangdang.ddframe.rdb.sharding.api.rule.BindingTableRule">-->
+        <!--<constructor-arg>-->
+            <!--<list>-->
+                <!--<ref bean="orderTableRule"/>-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+    <!--<bean id="shardingRule" class="com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule">-->
+        <!--<constructor-arg index="0" ref="dataSourceRule"/>-->
+        <!--<constructor-arg index="1">-->
+            <!--<list>-->
+                <!--<ref bean="orderTableRule"/>-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg index="2" ref="bindingTableRules"/>-->
+        <!--<constructor-arg index="3" ref="databaseShardingStrategy"/>-->
+        <!--<constructor-arg index="4" ref="tableShardingStrategy"/>-->
+    <!--</bean>-->
+    <!--<bean id="shardingDataSource" class="com.dangdang.ddframe.rdb.sharding.api.ShardingDataSourceFactory" factory-method="createDataSource">-->
+        <!--<constructor-arg ref="shardingRule"/>-->
+    <!--</bean>-->
+      <!--&ndash;&gt;-->
+
+
+    <!--<rdb:strategy id="databaseShardingStrategy" sharding-columns="user_id"-->
+                  <!--algorithm-class="org.virgil.algorithm.SingleKeyModuloDatabaseShardingAlgorithm"/>-->
+    <!--<rdb:strategy id="tableShardingStrategy" sharding-columns="order_id"-->
+                  <!--algorithm-class="org.virgil.algorithm.SingleKeyModuloTableShardingAlgorithm"/>-->
+
+    <!--<rdb:data-source id="shardingDataSource">-->
+        <!--<rdb:sharding-rule data-sources="ds_0,ds_1" default-data-source="ds_0"-->
+                           <!--id-generator-class="com.dangdang.ddframe.rdb.sharding.id.generator.self.CommonSelfIdGenerator">-->
+            <!--<rdb:table-rules>-->
+                <!--<rdb:table-rule logic-table="t_order" actual-tables="t_order_0,t_order_1"-->
+                                <!--database-strategy="databaseShardingStrategy" table-strategy="tableShardingStrategy">-->
+                    <!--<rdb:auto-increment-column column-name="id"/>-->
+                <!--</rdb:table-rule>-->
+            <!--</rdb:table-rules>-->
+        <!--</rdb:sharding-rule>-->
+    <!--</rdb:data-source>-->
+
+
+    <!--&lt;!&ndash; Spring整合Mybatis &ndash;&gt;-->
+    <!--<bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">-->
+        <!--<property name="dataSource" ref="shardingDataSource"/>-->
+        <!--&lt;!&ndash; 自动扫描Mapping.xml文件 &ndash;&gt;-->
+        <!--<property name="mapperLocations" value="classpath:/mybatis/*Mapper.xml"/>-->
+        <!--<property name="configLocation" value="classpath:/mybatis-config.xml"/>-->
+        <!--<property name="typeAliasesPackage" value="org.virgil.model"/>-->
+        <!--<property name="plugins">-->
+            <!--<list>-->
+                <!--&lt;!&ndash; 分页插件配置 &ndash;&gt;-->
+                <!--<bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">-->
+                    <!--<property name="dialectType" value="mysql"/>-->
+                <!--</bean>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--&lt;!&ndash; 全局配置注入 &ndash;&gt;-->
+        <!--<property name="globalConfig" ref="myGlobalConfig"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="myGlobalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">-->
+        <!--&lt;!&ndash;-->
+            <!--AUTO->`0`("数据库ID自增")-->
+            <!--INPUT->`1`(用户输入ID")-->
+            <!--ID_WORKER->`2`("全局唯一ID")-->
+            <!--UUID->`3`("全局唯一ID")-->
+        <!--&ndash;&gt;-->
+        <!--&lt;!&ndash;<property name="metaObjectHandler">&ndash;&gt;-->
+        <!--&lt;!&ndash;<bean class="com.baomidou.springmvc.common.MyMetaObjectHandler" />&ndash;&gt;-->
+        <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; MyBatis 动态扫描  &ndash;&gt;-->
+    <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+        <!--<property name="basePackage" value="org.virgil.mapper"/>-->
+        <!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 配置事务管理 &ndash;&gt;-->
+    <!--<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<property name="dataSource" ref="parentDataSource"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 注解方式配置事物 &ndash;&gt;-->
+    <!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>-->
+
+    <!-- 事务管理 属性 -->
+    <!--<tx:advice id="transactionAdvice" transaction-manager="transactionManager">-->
+    <!--<tx:attributes>-->
+    <!--<tx:method name="add*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="append*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="save*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="update*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="modify*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="edit*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="insert*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="delete*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="remove*" propagation="REQUIRED"/>-->
+    <!--<tx:method name="repair" propagation="REQUIRED"/>-->
+
+    <!--<tx:method name="get*" propagation="REQUIRED" read-only="true"/>-->
+    <!--<tx:method name="find*" propagation="REQUIRED" read-only="true"/>-->
+    <!--<tx:method name="load*" propagation="REQUIRED" read-only="true"/>-->
+    <!--<tx:method name="search*" propagation="REQUIRED" read-only="true"/>-->
+    <!--<tx:method name="datagrid*" propagation="REQUIRED" read-only="true"/>-->
+
+    <!--<tx:method name="*" propagation="REQUIRED" read-only="true"/>-->
+    <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!-- 配置切面 -->
+    <!--<aop:config>-->
+    <!--<aop:pointcut id="transactionPointcut" expression="execution(* org.virgil.service..*.*(..))"/>-->
+    <!--<aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>-->
+    <!--</aop:config>-->
+
+</beans>
